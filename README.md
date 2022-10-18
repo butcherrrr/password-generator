@@ -1,6 +1,6 @@
 # password-generator
 
-Generates passwords in the terminal using node (or bun).
+Generates passwords in the terminal using node (or bun). Done for my own convenience.
 
 1. Symlink to `pass.js` file:
 
