@@ -11,7 +11,7 @@ ln -s /path/to/file password_generator
 2. Set an alias in `.bashrc` (or `.zshrc`):
 
 ```bash
-alias np="node password_generator"
+alias np="node ~/password_generator"
 ```
 
 3. Then pass the password length as a param (minimum 6 characters):
