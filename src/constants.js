@@ -1,7 +1,7 @@
 const LENGTHS = {
-    MIN: 6,
-    MAX: 24,
-    DEFAULT: 12,
+  MIN: 6,
+  MAX: 24,
+  DEFAULT: 12,
 };
 
 const ERROR_MESSAGES = {
