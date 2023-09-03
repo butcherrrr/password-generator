@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const { exec } = require('child_process');
 const { PASSWORD_LENGTHS, CHARACTER_TYPES, MULTI_CASE_TYPE, PLATFORM_TYPES } = require('./constants');
 

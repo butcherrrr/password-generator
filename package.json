@@ -1,0 +1,22 @@
+{
+  "name": "password-generator",
+  "version": "1.0.0",
+  "description": "password-generator",
+  "main": "index.js",
+  "bin": {
+    "np": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/butcherrrr/password-generator.git"
+  },
+  "author": "butcherrrr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/butcherrrr/password-generator/issues"
+  },
+  "homepage": "https://github.com/butcherrrr/password-generator#readme"
+}
