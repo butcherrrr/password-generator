@@ -4,13 +4,22 @@ Generates passwords in the terminal using node (or bun). Copies direct to clipbo
 
 Done for my own convenience.
 
-Install:
+## Install:
 
 ```bash
 npm install np-password-generator -g
 ```
 
-Usage:
+## Usage:
 ```
-np <password-length> # leave blank for default of 12
+np <password-length>
+```
+(Leave arg blank for default length of 12)
+
+```bash
+np
+```
+
+```bash
+np 8
 ```
