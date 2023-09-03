@@ -1,28 +1,50 @@
-const args = process.argv.slice(2);
+const { exec } = require('child_process');
+const { PASSWORD_LENGTHS, CHARACTER_TYPES, MULTI_CASE_TYPE, PLATFORM_TYPES } = require('./constants');
 
-const MAX_PASSWORD_LENGTH = args[0] || 21;
-const MIN_PASSWORD_LENGTH = 6;
-const MIN_PASSWORD_LENGTH_ERROR = 'Password must be minimum six characters';
+let [, , requestedLength = PASSWORD_LENGTHS.DEFAULT] = process.argv;
 
-const CHARACTER_TYPES = {
-  LETTER: 'abcdefghijklmnopqrstuvwxyz',
-  NUMBER: '1234567890',
-  SYMBOL: '!"#€%&£$',
-};
-const MULTI_CASE_TYPE = 'LETTER';
+if (requestedLength && isNaN(requestedLength)) {
+  console.log('Usage: np <password-length> # Arg must be a number, leave blank for default of 12');
+  process.exit();
+}
+
+if (requestedLength && requestedLength < PASSWORD_LENGTHS.MIN) {
+  console.log('Usage: np <password-length> # Arg must be more than six characters');
+  process.exit();
+}
+
+const copyToClipBoard = password => {
+  const copyCommand = {
+    [PLATFORM_TYPES.WINDOWS]: 'clip',
+    [PLATFORM_TYPES.LINUX]: 'xclip',
+    [PLATFORM_TYPES.MAC_OS]: 'pbcopy',
+  }[process.platform];
+
+  const escapedPassword = password.replace(/(\$|")/g, '\\$&');
+
+  const cp = exec(`echo "${escapedPassword}" | ${copyCommand}`);
+
+  cp.on('error', err => {
+    console.error('Error copying to clipboard:', err);
+  });
+
+  cp.on('exit', code => {
+    if (code === 0) {
+      console.log('Copied to clipboard!');
+    } else {
+      console.error('Copy to clipboard failed. Exit code:', code);
+    }
+  });
+}
 
 const gen = () => {
-  if (MAX_PASSWORD_LENGTH < MIN_PASSWORD_LENGTH) {
-    return MIN_PASSWORD_LENGTH_ERROR;
-  }
-
   const randomize = (characterType, capitalize) => {
     const character = characterType[Math.floor(Math.random() * characterType.length)];
     return capitalize ? character.toUpperCase() : character;
   };
 
   let password = '';
-  while (password.length < MAX_PASSWORD_LENGTH) {
+  while (password.length < requestedLength) {
     for (const [key, value] of Object.entries(CHARACTER_TYPES)) {
       password += randomize(value, key === MULTI_CASE_TYPE && Math.random() < 0.5);
     }
@@ -34,4 +56,5 @@ const gen = () => {
 const result = gen();
 
 console.log(result);
+copyToClipBoard(result);
 
