@@ -71,7 +71,7 @@ describe('Validate', () => {
 });
 
 describe('Password Generator', () => {
-  it.only('should return a password with the requested length', () => {
+  it('should return a password with the requested length', () => {
     const result = generatePassword(10);
     expect(result.length).equals(10);
   });
