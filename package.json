@@ -1,6 +1,6 @@
 {
   "name": "np-password-generator",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "password-generator",
   "main": "index.js",
   "bin": {
