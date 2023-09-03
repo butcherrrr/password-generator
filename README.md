@@ -11,6 +11,6 @@ npm install np-password-generator -g
 ```
 
 Usage:
-```bash
+```
 np <password-length> # leave blank for default of 12
 ```
