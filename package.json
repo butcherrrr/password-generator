@@ -1,5 +1,5 @@
 {
-  "name": "password-generator",
+  "name": "np-password-generator",
   "version": "1.0.2",
   "description": "password-generator",
   "main": "index.js",
