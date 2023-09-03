@@ -5,17 +5,17 @@ module.exports = args => {
 
   if (isNaN(requestedLength)) {
     console.log(ERROR_MESSAGES.NOT_A_NUMBER);
-    process.exit();
+    return false;
   }
 
   if (requestedLength < LENGTHS.MIN) {
     console.log(ERROR_MESSAGES.MIN);
-    process.exit();
+    return false;
   }
 
   if (requestedLength > LENGTHS.MAX) {
     console.log(ERROR_MESSAGES.MAX);
-    process.exit();
+    return false;
   }
 
   return requestedLength;

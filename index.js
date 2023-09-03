@@ -4,9 +4,13 @@ const generatePassword = require('./src/password-generator');
 const copyToClipboard = require('./src/copy-clipboard');
 
 const main = () => {
-  const requestedLength = validate(process.argv);
+  const validLength = validate(process.argv);
 
-  const password = generatePassword(requestedLength);
+  if (!validLength) {
+    process.exit();
+  }
+
+  const password = generatePassword(validLength);
 
   console.log(password);
   copyToClipboard(password);

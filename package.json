@@ -7,7 +7,7 @@
     "np": "./index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,11 @@
   "bugs": {
     "url": "https://github.com/butcherrrr/password-generator/issues"
   },
-  "homepage": "https://github.com/butcherrrr/password-generator#readme"
+  "homepage": "https://github.com/butcherrrr/password-generator#readme",
+  "dependencies": {
+    "chai": "^3.5.0",
+    "chai-sinon": "^2.8.1",
+    "mocha": "^10.2.0",
+    "sinon": "^15.2.0"
+  }
 }
