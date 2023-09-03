@@ -2,13 +2,16 @@ const chai = require('chai');
 const sinon = require('sinon');
 const chaiSinon = require('chai-sinon');
 
+const validate = require('./../src/validate');
+const generatePassword = require('./../src/password-generator');
+const getRandomCharacter = require('./../src/utils/random-character');
+const copyToClipboard = require('./../src/copy-clipboard');
+const child_process = require('child_process');
+
+const { VALIDATION: { ERROR_MESSAGES }, CHARACTER_TYPES } = require('./../src/constants');
+
 chai.use(chaiSinon);
 const { expect } = chai;
-
-const validate = require('./../src/validate');
-const { VALIDATION: { ERROR_MESSAGES } } = require('./../src/constants');
-
-const generatePassword = require('./../src/password-generator');
 
 describe('Validate', () => {
   let consoleLogStub;
@@ -68,8 +71,110 @@ describe('Validate', () => {
 });
 
 describe('Password Generator', () => {
-  it('should return a password with the requested length', () => {
+  it.only('should return a password with the requested length', () => {
+    const result = generatePassword(10);
+    expect(result.length).equals(10);
+  });
+
+  it('should contain a mixture of uppercase letters, lowercase letters, numbers, and symbols', () => {
     const result = generatePassword(12);
-    expect(result.length).equals(12);
+
+    expect(result).to.match(/[a-z]/);
+    expect(result).to.match(/[A-Z]/);
+    expect(result).to.match(/[0-9]/);
+    expect(result).to.match(/["!€%&£$#]/);
+  });
+
+  describe('randomize', () => {
+    it('should return a lower case letter', () => {
+      const capitalize = false;
+
+      const result = getRandomCharacter(CHARACTER_TYPES.LETTER, capitalize);
+
+      expect(result).equals(result.toLowerCase());
+    });
+
+    it('should return a upper case letter', () => {
+      const capitalize = true;
+
+      const result = getRandomCharacter(CHARACTER_TYPES.LETTER, capitalize);
+
+      expect(result).equals(result.toUpperCase());
+    });
+
+    it('should return a number', () => {
+      const capitalize = false;
+
+      const result = getRandomCharacter(CHARACTER_TYPES.NUMBER, capitalize);
+
+      expect(isNaN(result)).equals(false);
+    });
+
+    it('should return a symbol', () => {
+      const capitalize = false;
+
+      const result = getRandomCharacter(CHARACTER_TYPES.NUMBER, capitalize);
+
+      expect(result).to.be.oneOf([...CHARACTER_TYPES.NUMBER]);
+    });
+  });
+});
+
+describe('Copy to Clipboard', () => {
+  let execStub;
+  let stderrOnStub;
+  let exitOnStub;
+
+  beforeEach(() => {
+    execStub = sinon.stub(child_process, 'exec');
+
+    stderrOnStub = sinon.stub();
+    exitOnStub = sinon.stub();
+  });
+
+  afterEach(() => {
+    execStub.restore();
+  });
+
+  it('should return a correct command for Windows platform', () => {
+    const platform = 'win32';
+    const password = 'randompassword'
+
+    execStub.returns({
+      stderr: { on: stderrOnStub },
+      on: exitOnStub,
+    });
+
+    copyToClipboard(password, platform);
+
+    expect(execStub).to.have.been.calledWith('echo "randompassword" | clip');
+  });
+
+  it('should return a correct command for Linux platform', () => {
+    const platform = 'linux';
+    const password = 'randompassword'
+
+    execStub.returns({
+      stderr: { on: stderrOnStub },
+      on: exitOnStub,
+    });
+
+    copyToClipboard(password, platform);
+
+    expect(execStub).to.have.been.calledWith('echo "randompassword" | pbcopy');
+  });
+
+  it('should return a correct command for macOS platform', () => {
+    const platform = 'darwin';
+    const password = 'randompassword'
+
+    execStub.returns({
+      stderr: { on: stderrOnStub },
+      on: exitOnStub,
+    });
+
+    copyToClipboard(password, platform);
+
+    expect(execStub).to.have.been.calledWith('echo "randompassword" | pbcopy');
   });
 });

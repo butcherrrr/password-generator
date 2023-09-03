@@ -13,7 +13,9 @@ const main = () => {
   const password = generatePassword(validLength);
 
   console.log(password);
-  copyToClipboard(password);
+
+  const { platform } = process;
+  copyToClipboard(password, platform);
 };
 
 main();
