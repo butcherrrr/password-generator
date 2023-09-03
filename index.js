@@ -17,7 +17,7 @@ if (requestedLength && requestedLength < PASSWORD_LENGTHS.MIN) {
 const copyToClipBoard = password => {
   const copyCommand = {
     [PLATFORM_TYPES.WINDOWS]: 'clip',
-    [PLATFORM_TYPES.LINUX]: 'xclip',
+    [PLATFORM_TYPES.LINUX]: 'pbcopy',
     [PLATFORM_TYPES.MAC_OS]: 'pbcopy',
   }[process.platform];
 
