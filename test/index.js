@@ -147,7 +147,7 @@ describe('Copy to Clipboard', () => {
 
     copyToClipboard(password, platform);
 
-    expect(execStub).to.have.been.calledWith('echo "randompassword" | clip');
+    expect(execStub).to.have.been.calledWith('printf "randompassword" | clip');
   });
 
   it('should return a correct command for Linux platform', () => {
@@ -161,7 +161,7 @@ describe('Copy to Clipboard', () => {
 
     copyToClipboard(password, platform);
 
-    expect(execStub).to.have.been.calledWith('echo "randompassword" | pbcopy');
+    expect(execStub).to.have.been.calledWith('printf "randompassword" | pbcopy');
   });
 
   it('should return a correct command for macOS platform', () => {
@@ -175,6 +175,6 @@ describe('Copy to Clipboard', () => {
 
     copyToClipboard(password, platform);
 
-    expect(execStub).to.have.been.calledWith('echo "randompassword" | pbcopy');
+    expect(execStub).to.have.been.calledWith('printf "randompassword" | pbcopy');
   });
 });

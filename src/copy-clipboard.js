@@ -10,7 +10,7 @@ module.exports = (password, platform) => {
 
   const escapedPassword = password.replace(/(\$|")/g, '\\$&');
 
-  const cp = child_process.exec(`echo "${escapedPassword}" | ${copyCommand}`);
+  const cp = child_process.exec(`printf "${escapedPassword}" | ${copyCommand}`);
 
   cp.stderr.on('data', data => {
     console.error(CLIPBOARD_MESSAGES.COMMAND_ERROR, data);
