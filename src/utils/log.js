@@ -1,6 +1,6 @@
 const { LOG_STYLE } = require('../constants');
 
-const output = (text, options = {}) => {
+const output = (text, outputStream, options = {}) => {
   const {
     color = LOG_STYLE.NONE, bold = false, lineBreaks = false, checkmark = false,
   } = options;
@@ -9,34 +9,34 @@ const output = (text, options = {}) => {
   const breakLine = lineBreaks ? LOG_STYLE.LINE_BREAK : LOG_STYLE.NONE;
   const check = checkmark ? LOG_STYLE.CHECKMARK : LOG_STYLE.NONE;
 
-  process.stdout.write(`${breakLine}${color}${check} ${boldText}${text}${LOG_STYLE.RESET}${breakLine}\n`);
+  outputStream.write(`${breakLine}${color}${check}${boldText}${text}${LOG_STYLE.RESET}${breakLine}\n`);
 };
 
-const error = (message, data = undefined) => {
-  output(message, { color: LOG_STYLE.RED });
+const error = (message, data = undefined, outputStream = process.stdout) => {
+  output(message, outputStream, { color: LOG_STYLE.RED });
   if (data) {
-    output(data, { color: LOG_STYLE.RED });
+    output(data, outputStream, { color: LOG_STYLE.RED });
   }
 };
 
-const info = (message, data = undefined) => {
-  output(message);
+const info = (message, data = undefined, outputStream = process.stdout) => {
+  output(message, outputStream);
   if (data) {
-    output(data);
+    output(data, outputStream);
   }
 };
 
-const result = (message, data = undefined) => {
-  output(message);
+const result = (message, data = undefined, outputStream = process.stdout) => {
+  output(message, outputStream);
   if (data) {
-    output(data, { bold: true, lineBreaks: true });
+    output(data, outputStream, { bold: true, lineBreaks: true });
   }
 };
 
-const success = (message, data) => {
-  output(message, { color: LOG_STYLE.GREEN, checkmark: true });
+const success = (message, data, outputStream = process.stdout) => {
+  output(message, outputStream, { color: LOG_STYLE.GREEN, checkmark: true });
   if (data) {
-    output(message, { color: LOG_STYLE.GREEN });
+    output(message, outputStream, { color: LOG_STYLE.GREEN });
   }
 };
 

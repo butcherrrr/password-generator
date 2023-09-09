@@ -220,4 +220,56 @@ describe('Copy to Clipboard', () => {
 
     expect(execStub).to.have.been.calledWith('printf "%%%%%%%%%%%%%%%%%%%%%%%%" | pbcopy');
   });
+
+  describe('Log', () => {
+    let outputStreamStub;
+
+    beforeEach(() => {
+      outputStreamStub = {
+        write: sinon.stub(),
+      };
+    });
+
+    describe('error', () => {
+      it('should log with error formatting', () => {
+        const message = 'test';
+        const data = undefined;
+
+        log.error(message, data, outputStreamStub);
+
+        expect(outputStreamStub.write).to.have.been.calledWith('\x1B[31mtest\x1B[0m\n');
+      });
+    });
+    describe('info', () => {
+      it('should log with info formatting', () => {
+        const message = 'test';
+        const data = undefined;
+
+        log.info(message, data, outputStreamStub);
+
+        expect(outputStreamStub.write).to.have.been.calledWith('test\x1B[0m\n');
+      });
+    });
+    describe('result', () => {
+      it('should log with result formatting', () => {
+        const message = 'test';
+        const data = 'test';
+
+        log.result(message, data, outputStreamStub);
+
+        expect(outputStreamStub.write).to.have.been.calledWith('test\x1B[0m\n');
+        expect(outputStreamStub.write.secondCall).to.have.been.calledWith('\n\x1B[1mtest\x1B[0m\n\n');
+      });
+    });
+    describe('success', () => {
+      it('should log with success formatting', () => {
+        const message = 'test';
+        const data = undefined;
+
+        log.success(message, data, outputStreamStub);
+
+        expect(outputStreamStub.write).to.have.been.calledWith('\x1B[32m✔test\x1B[0m\n');
+      });
+    });
+  });
 });
