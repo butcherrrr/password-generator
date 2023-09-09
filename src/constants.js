@@ -29,7 +29,7 @@ const CLIPBOARD_MESSAGES = {
   EXIT_CODE: 'Copy to clipboard failed. Exit code:',
 };
 
- const PLATFORM_TYPES = {
+const PLATFORM_TYPES = {
   WINDOWS: 'win32',
   LINUX: 'linux',
   MAC_OS: 'darwin',

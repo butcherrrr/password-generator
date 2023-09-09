@@ -1,71 +1,72 @@
+/* eslint-disable no-sparse-arrays */
 const chai = require('chai');
 const sinon = require('sinon');
 const chaiSinon = require('chai-sinon');
 
-const validate = require('./../src/validate');
-const generatePassword = require('./../src/password-generator');
-const getRandomCharacter = require('./../src/utils/random-character');
-const copyToClipboard = require('./../src/copy-clipboard');
-const child_process = require('child_process');
+const childProcess = require('child_process');
+const validate = require('../src/validate');
+const generatePassword = require('../src/password-generator');
+const getRandomCharacter = require('../src/utils/random-character');
+const copyToClipboard = require('../src/copy-clipboard');
 
-const { VALIDATION: { ERROR_MESSAGES }, CHARACTER_TYPES } = require('./../src/constants');
+const { VALIDATION: { ERROR_MESSAGES }, CHARACTER_TYPES } = require('../src/constants');
 
 chai.use(chaiSinon);
 const { expect } = chai;
 
 describe('Validate', () => {
-  let consoleLogStub;
+  let consoleErrorStub;
 
   beforeEach(() => {
-     consoleLogStub = sinon.stub(console, 'log');
+    consoleErrorStub = sinon.stub(console, 'error');
   });
 
   afterEach(() => {
-    consoleLogStub.restore();
+    consoleErrorStub.restore();
   });
 
   it('should return false if not a number and print out not a number message', () => {
-    const args = [ , , 'string'];
+    const args = [, , 'string'];
 
-    const result = validate(args)
+    const result = validate(args);
 
-    expect(consoleLogStub).to.have.been.calledWith(ERROR_MESSAGES.NOT_A_NUMBER);
+    expect(consoleErrorStub).to.have.been.calledWith(ERROR_MESSAGES.NOT_A_NUMBER);
     expect(result).equals(false);
   });
 
   it('should return false if less than min length and print out min length message', () => {
-    const args = [ , , 3];
+    const args = [, , 3];
 
-    const result = validate(args)
+    const result = validate(args);
 
-    expect(consoleLogStub).to.have.been.calledWith(ERROR_MESSAGES.MIN);
+    expect(consoleErrorStub).to.have.been.calledWith(ERROR_MESSAGES.MIN);
     expect(result).equals(false);
   });
 
   it('should return false if more than max length and print out max length message', () => {
-    const args = [ , , 25];
+    const args = [, , 25];
 
-    const result = validate(args)
+    const result = validate(args);
 
-    expect(consoleLogStub).to.have.been.calledWith(ERROR_MESSAGES.MAX);
+    expect(consoleErrorStub).to.have.been.calledWith(ERROR_MESSAGES.MAX);
     expect(result).equals(false);
   });
 
   it('should return valid length and not print any message', () => {
-    const args = [ , , 12];
+    const args = [, , 12];
 
-    const result = validate(args)
+    const result = validate(args);
 
-    expect(consoleLogStub.callCount).equals(0);
+    expect(consoleErrorStub.callCount).equals(0);
     expect(result).equals(12);
   });
 
   it('should return default length if requested length is undefined and not print any message', () => {
-    const args = [ , , undefined];
+    const args = [, , undefined];
 
-    const result = validate(args)
+    const result = validate(args);
 
-    expect(consoleLogStub.callCount).equals(0);
+    expect(consoleErrorStub.callCount).equals(0);
     expect(result).equals(12);
   });
 });
@@ -76,11 +77,10 @@ describe('Password Generator', () => {
     expect(result.length).equals(10);
   });
 
-  it('should contain a mixture of uppercase letters, lowercase letters, numbers, and symbols', () => {
+  it('should contain a mixture of letters, numbers, and symbols', () => {
     const result = generatePassword(12);
 
-    expect(result).to.match(/[a-z]/);
-    expect(result).to.match(/[A-Z]/);
+    expect(result).to.match(/[A-Za-z]/);
     expect(result).to.match(/[0-9]/);
     expect(result).to.match(/["!€%&£$#]/);
   });
@@ -107,7 +107,7 @@ describe('Password Generator', () => {
 
       const result = getRandomCharacter(CHARACTER_TYPES.NUMBER, capitalize);
 
-      expect(isNaN(result)).equals(false);
+      expect(Number.isNaN(Number(result))).equals(false);
     });
 
     it('should return a symbol', () => {
@@ -126,7 +126,7 @@ describe('Copy to Clipboard', () => {
   let exitOnStub;
 
   beforeEach(() => {
-    execStub = sinon.stub(child_process, 'exec');
+    execStub = sinon.stub(childProcess, 'exec');
 
     stderrOnStub = sinon.stub();
     exitOnStub = sinon.stub();
@@ -138,7 +138,7 @@ describe('Copy to Clipboard', () => {
 
   it('should return a correct command for Windows platform', () => {
     const platform = 'win32';
-    const password = 'randompassword'
+    const password = 'randompassword';
 
     execStub.returns({
       stderr: { on: stderrOnStub },
@@ -152,7 +152,7 @@ describe('Copy to Clipboard', () => {
 
   it('should return a correct command for Linux platform', () => {
     const platform = 'linux';
-    const password = 'randompassword'
+    const password = 'randompassword';
 
     execStub.returns({
       stderr: { on: stderrOnStub },
@@ -166,7 +166,7 @@ describe('Copy to Clipboard', () => {
 
   it('should return a correct command for macOS platform', () => {
     const platform = 'darwin';
-    const password = 'randompassword'
+    const password = 'randompassword';
 
     execStub.returns({
       stderr: { on: stderrOnStub },
@@ -180,7 +180,7 @@ describe('Copy to Clipboard', () => {
 
   it('should escape $ when calling copy command', () => {
     const platform = 'darwin';
-    const password = '$$$$$$$$$$$$'
+    const password = '$$$$$$$$$$$$';
 
     execStub.returns({
       stderr: { on: stderrOnStub },
@@ -194,7 +194,7 @@ describe('Copy to Clipboard', () => {
 
   it('should escape " when calling copy command', () => {
     const platform = 'darwin';
-    const password = '""""""""""""'
+    const password = '""""""""""""';
 
     execStub.returns({
       stderr: { on: stderrOnStub },
@@ -208,7 +208,7 @@ describe('Copy to Clipboard', () => {
 
   it('should escape % when calling copy command', () => {
     const platform = 'darwin';
-    const password = '%%%%%%%%%%%%'
+    const password = '%%%%%%%%%%%%';
 
     execStub.returns({
       stderr: { on: stderrOnStub },

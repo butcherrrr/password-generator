@@ -1,4 +1,4 @@
-const child_process = require('child_process');
+const childProcess = require('child_process');
 const { CLIPBOARD_MESSAGES, PLATFORM_TYPES } = require('./constants');
 
 module.exports = (password, platform) => {
@@ -10,7 +10,7 @@ module.exports = (password, platform) => {
 
   const escapedPassword = password.replace(/(\$|")/g, '\\$&').replace(/%/g, '%%');
 
-  const cp = child_process.exec(`printf "${escapedPassword}" | ${copyCommand}`);
+  const cp = childProcess.exec(`printf "${escapedPassword}" | ${copyCommand}`);
 
   cp.stderr.on('data', data => {
     console.error(CLIPBOARD_MESSAGES.COMMAND_ERROR, data);
@@ -23,4 +23,4 @@ module.exports = (password, platform) => {
       console.error(CLIPBOARD_MESSAGES.EXIT_CODE, code);
     }
   });
-}
+};
