@@ -178,20 +178,6 @@ describe('Copy to Clipboard', () => {
     expect(execStub).to.have.been.calledWith('printf "randompassword" | pbcopy');
   });
 
-  it('should return a correct command for macOS platform', () => {
-    const platform = 'darwin';
-    const password = 'randompassword'
-
-    execStub.returns({
-      stderr: { on: stderrOnStub },
-      on: exitOnStub,
-    });
-
-    copyToClipboard(password, platform);
-
-    expect(execStub).to.have.been.calledWith('printf "randompassword" | pbcopy');
-  });
-
   it('should escape $ when calling copy command', () => {
     const platform = 'darwin';
     const password = '$$$$$$$$$$$$'
