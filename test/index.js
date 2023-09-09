@@ -8,6 +8,7 @@ const validate = require('../src/validate');
 const generatePassword = require('../src/password-generator');
 const getRandomCharacter = require('../src/utils/random-character');
 const copyToClipboard = require('../src/copy-clipboard');
+const log = require('../src/utils/log');
 
 const { VALIDATION: { ERROR_MESSAGES }, CHARACTER_TYPES } = require('../src/constants');
 
@@ -15,14 +16,14 @@ chai.use(chaiSinon);
 const { expect } = chai;
 
 describe('Validate', () => {
-  let consoleErrorStub;
+  let logStub;
 
   beforeEach(() => {
-    consoleErrorStub = sinon.stub(console, 'error');
+    logStub = sinon.stub(log, 'error');
   });
 
   afterEach(() => {
-    consoleErrorStub.restore();
+    logStub.restore();
   });
 
   it('should return false if not a number and print out not a number message', () => {
@@ -30,7 +31,7 @@ describe('Validate', () => {
 
     const result = validate(args);
 
-    expect(consoleErrorStub).to.have.been.calledWith(ERROR_MESSAGES.NOT_A_NUMBER);
+    expect(logStub).to.have.been.calledWith(ERROR_MESSAGES.NOT_A_NUMBER);
     expect(result).equals(false);
   });
 
@@ -39,7 +40,7 @@ describe('Validate', () => {
 
     const result = validate(args);
 
-    expect(consoleErrorStub).to.have.been.calledWith(ERROR_MESSAGES.MIN);
+    expect(logStub).to.have.been.calledWith(ERROR_MESSAGES.MIN);
     expect(result).equals(false);
   });
 
@@ -48,7 +49,7 @@ describe('Validate', () => {
 
     const result = validate(args);
 
-    expect(consoleErrorStub).to.have.been.calledWith(ERROR_MESSAGES.MAX);
+    expect(logStub).to.have.been.calledWith(ERROR_MESSAGES.MAX);
     expect(result).equals(false);
   });
 
@@ -57,7 +58,7 @@ describe('Validate', () => {
 
     const result = validate(args);
 
-    expect(consoleErrorStub.callCount).equals(0);
+    expect(logStub.callCount).equals(0);
     expect(result).equals(12);
   });
 
@@ -66,7 +67,7 @@ describe('Validate', () => {
 
     const result = validate(args);
 
-    expect(consoleErrorStub.callCount).equals(0);
+    expect(logStub.callCount).equals(0);
     expect(result).equals(12);
   });
 });

@@ -35,10 +35,24 @@ const PLATFORM_TYPES = {
   MAC_OS: 'darwin',
 };
 
+const LOG_STYLE = {
+  RED: '\x1b[31m',
+  BOLD: '\x1b[1m',
+  GREEN: '\x1b[32m',
+  RESET: '\x1b[0m',
+  LINE_BREAK: '\n',
+  CHECKMARK: '\u2714',
+  NONE: '',
+};
+
+const PASSWORD_MESSAGE = 'New password:';
+
 module.exports = {
   VALIDATION,
   CHARACTER_TYPES,
   MULTI_CASE_TYPE,
   CLIPBOARD_MESSAGES,
   PLATFORM_TYPES,
+  LOG_STYLE,
+  PASSWORD_MESSAGE,
 };

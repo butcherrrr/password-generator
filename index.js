@@ -2,6 +2,8 @@
 const validate = require('./src/validate');
 const generatePassword = require('./src/password-generator');
 const copyToClipboard = require('./src/copy-clipboard');
+const log = require('./src/utils/log');
+const { PASSWORD_MESSAGE } = require('./src/constants');
 
 const main = () => {
   const validLength = validate(process.argv);
@@ -12,7 +14,7 @@ const main = () => {
 
   const password = generatePassword(validLength);
 
-  console.log(password);
+  log.result(PASSWORD_MESSAGE, password);
 
   const { platform } = process;
   copyToClipboard(password, platform);

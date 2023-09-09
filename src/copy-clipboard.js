@@ -1,5 +1,6 @@
 const childProcess = require('child_process');
 const { CLIPBOARD_MESSAGES, PLATFORM_TYPES } = require('./constants');
+const log = require('./utils/log');
 
 module.exports = (password, platform) => {
   const copyCommand = {
@@ -13,14 +14,14 @@ module.exports = (password, platform) => {
   const cp = childProcess.exec(`printf "${escapedPassword}" | ${copyCommand}`);
 
   cp.stderr.on('data', data => {
-    console.error(CLIPBOARD_MESSAGES.COMMAND_ERROR, data);
+    log.error(CLIPBOARD_MESSAGES.COMMAND_ERROR, data);
   });
 
   cp.on('exit', code => {
     if (code === 0) {
-      console.log(CLIPBOARD_MESSAGES.SUCCESS);
+      log.success(CLIPBOARD_MESSAGES.SUCCESS);
     } else {
-      console.error(CLIPBOARD_MESSAGES.EXIT_CODE, code);
+      log.error(CLIPBOARD_MESSAGES.EXIT_CODE, code);
     }
   });
 };
