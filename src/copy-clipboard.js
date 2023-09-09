@@ -8,7 +8,7 @@ module.exports = (password, platform) => {
     [PLATFORM_TYPES.MAC_OS]: 'pbcopy',
   }[platform];
 
-  const escapedPassword = password.replace(/(\$|")/g, '\\$&');
+  const escapedPassword = password.replace(/(\$|")/g, '\\$&').replace(/%/g, '%%');
 
   const cp = child_process.exec(`printf "${escapedPassword}" | ${copyCommand}`);
 
