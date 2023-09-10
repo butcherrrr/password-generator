@@ -7,30 +7,15 @@ const init = (outputInjection = process.stdout) => {
 };
 
 const format = (text, options = {}) => {
-  let formatted;
+  const formatted = {
+    [LOG_TYPES.ERROR]: `${LOG_STYLE.RED}${text}${LOG_STYLE.RESET}`,
+    [LOG_TYPES.INFO]: `${text}`,
+    [LOG_TYPES.RESULT_HEADER]: `${text}${LOG_STYLE.LINE_BREAK}`,
+    [LOG_TYPES.RESULT_DATA]: `${LOG_STYLE.BOLD}${text}${LOG_STYLE.RESET}${LOG_STYLE.LINE_BREAK}`,
+    [LOG_TYPES.SUCCESS]: `${LOG_STYLE.GREEN}${LOG_STYLE.CHECKMARK} ${text}${LOG_STYLE.RESET}`,
+  }[options.type];
 
-  switch (options.type) {
-    case LOG_TYPES.ERROR:
-      formatted = `${LOG_STYLE.RED}${text}${LOG_STYLE.RESET}\n`;
-      break;
-    case LOG_TYPES.INFO:
-      formatted = `${text}\n`;
-      break;
-    case LOG_TYPES.RESULT_HEADER:
-      formatted = `${text}${LOG_STYLE.LINE_BREAK}\n`;
-      break;
-    case LOG_TYPES.RESULT_DATA:
-      formatted = `${LOG_STYLE.BOLD}${text}${LOG_STYLE.RESET}${LOG_STYLE.LINE_BREAK}\n`;
-      break;
-    case LOG_TYPES.SUCCESS:
-      formatted = `${LOG_STYLE.GREEN}${LOG_STYLE.CHECKMARK} ${text}${LOG_STYLE.RESET}\n`;
-      break;
-    default:
-      formatted = `${text}\n`;
-      break;
-  }
-
-  return formatted;
+  return `${formatted}${LOG_STYLE.LINE_BREAK}`;
 };
 
 const error = (message, data = undefined) => {
