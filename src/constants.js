@@ -26,7 +26,8 @@ const MULTI_CASE_TYPE = 'LETTER';
 const CLIPBOARD_MESSAGES = {
   COMMAND_ERROR: 'Clipboard command error:',
   SUCCESS: 'Copied to clipboard!',
-  EXIT_CODE: 'Copy to clipboard failed. Exit code:',
+  EXIT_CODE: 'Copy to clipboard failed.',
+  INSTALL: 'You may need to install:',
 };
 
 const PLATFORM_TYPES = {
@@ -42,11 +43,13 @@ const LOG_STYLE = {
   RESET: '\x1b[0m',
   LINE_BREAK: '\n',
   CHECKMARK: '\u2714',
+  CROSS: '\u2718',
   NONE: '',
 };
 
 const LOG_TYPES = {
-  ERROR: 'error',
+  ERROR_HEADER: 'error-header',
+  ERROR_DATA: 'error-data',
   INFO: 'info',
   RESULT_HEADER: 'result-header',
   RESULT_DATA: 'result-data',

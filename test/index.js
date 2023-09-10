@@ -162,7 +162,7 @@ describe('Copy to Clipboard', () => {
 
     copyToClipboard(password, platform);
 
-    expect(execStub).to.have.been.calledWith('printf "randompassword" | pbcopy');
+    expect(execStub).to.have.been.calledWith('printf "randompassword" | xclip');
   });
 
   it('should return a correct command for macOS platform', () => {
@@ -220,6 +220,88 @@ describe('Copy to Clipboard', () => {
 
     expect(execStub).to.have.been.calledWith('printf "%%%%%%%%%%%%%%%%%%%%%%%%" | pbcopy');
   });
+
+  it('should log error on stderr data event', () => {
+    const platform = 'darwin';
+    const password = 'randompassword';
+
+    execStub.returns({
+      stderr: { on: stderrOnStub },
+      on: exitOnStub,
+    });
+
+    const logErrorStub = sinon.stub(log, 'error');
+
+    copyToClipboard(password, platform);
+
+    stderrOnStub.yield('some error');
+
+    logErrorStub.restore();
+
+    expect(logErrorStub).to.have.been.calledWith('Clipboard command error:', 'some error');
+  });
+
+  it('should log error on child process exit event if exit code is not 0', () => {
+    const platform = 'darwin';
+    const password = 'randompassword';
+
+    execStub.returns({
+      stderr: { on: stderrOnStub },
+      on: exitOnStub,
+    });
+
+    const logErrorStub = sinon.stub(log, 'error');
+
+    copyToClipboard(password, platform);
+
+    exitOnStub.yield(1);
+
+    logErrorStub.restore();
+
+    expect(logErrorStub).to.have.been.calledWith('Copy to clipboard failed.');
+  });
+
+  it('should log info on child process exit event if exit code is 127', () => {
+    const platform = 'darwin';
+    const password = 'randompassword';
+
+    execStub.returns({
+      stderr: { on: stderrOnStub },
+      on: exitOnStub,
+    });
+
+    const logInfoStub = sinon.stub(log, 'info');
+    const logErrorStub = sinon.stub(log, 'error');
+
+    copyToClipboard(password, platform);
+
+    exitOnStub.yield(127);
+
+    logInfoStub.restore();
+    logErrorStub.restore();
+
+    expect(logInfoStub).to.have.been.calledWith('You may need to install: pbcopy');
+  });
+
+  it('should log sucess  on child process exit event if exit code is 0', () => {
+    const platform = 'darwin';
+    const password = 'randompassword';
+
+    execStub.returns({
+      stderr: { on: stderrOnStub },
+      on: exitOnStub,
+    });
+
+    const logSuccessStub = sinon.stub(log, 'success');
+
+    copyToClipboard(password, platform);
+
+    exitOnStub.yield(0);
+
+    logSuccessStub.restore();
+
+    expect(logSuccessStub).to.have.been.calledWith('Copied to clipboard!');
+  });
 });
 
 describe('Log', () => {
@@ -233,45 +315,41 @@ describe('Log', () => {
     log.init(outputStreamStub);
   });
 
-  describe('error', () => {
-    it('should log with error formatting', () => {
-      const message = 'test';
-      const data = undefined;
+  it('should log with error formatting', () => {
+    const message = 'test';
+    const data = 'test';
 
-      log.error(message, data);
+    log.error(message, data);
 
-      expect(outputStreamStub.write).to.have.been.calledWith('\x1B[31mtest\x1B[0m\n');
-    });
+    expect(outputStreamStub.write).to.have.been.calledWith('\x1B[31m✘ test\x1B[0m\n');
+    expect(outputStreamStub.write.secondCall).to.have.been.calledWith('test\n');
   });
-  describe('info', () => {
-    it('should log with info formatting', () => {
-      const message = 'test';
-      const data = undefined;
 
-      log.info(message, data);
+  it('should log with info formatting', () => {
+    const message = 'test';
+    const data = undefined;
 
-      expect(outputStreamStub.write).to.have.been.calledWith('test\n');
-    });
+    log.info(message, data);
+
+    expect(outputStreamStub.write).to.have.been.calledWith('test\n');
   });
-  describe('result', () => {
-    it('should log with result formatting', () => {
-      const message = 'test';
-      const data = 'test';
 
-      log.result(message, data);
+  it('should log with result formatting', () => {
+    const message = 'test';
+    const data = 'test';
 
-      expect(outputStreamStub.write).to.have.been.calledWith('test\n\n');
-      expect(outputStreamStub.write.secondCall).to.have.been.calledWith('\x1B[1mtest\x1B[0m\n\n');
-    });
+    log.result(message, data);
+
+    expect(outputStreamStub.write).to.have.been.calledWith('test\n\n');
+    expect(outputStreamStub.write.secondCall).to.have.been.calledWith('\x1B[1mtest\x1B[0m\n\n');
   });
-  describe('success', () => {
-    it('should log with success formatting', () => {
-      const message = 'test';
-      const data = undefined;
 
-      log.success(message, data);
+  it('should log with success formatting', () => {
+    const message = 'test';
+    const data = undefined;
 
-      expect(outputStreamStub.write).to.have.been.calledWith('\x1B[32m✔ test\x1B[0m\n');
-    });
+    log.success(message, data);
+
+    expect(outputStreamStub.write).to.have.been.calledWith('\x1B[32m✔ test\x1B[0m\n');
   });
 });

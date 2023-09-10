@@ -11,15 +11,13 @@ const main = () => {
   const validLength = validate(process.argv);
 
   if (!validLength) {
-    process.exit();
+    process.exit(1);
   }
 
   const password = generatePassword(validLength);
-
   log.result(PASSWORD_MESSAGE, password);
 
-  const { platform } = process;
-  copyToClipboard(password, platform);
+  copyToClipboard(password);
 };
 
 main();
