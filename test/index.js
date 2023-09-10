@@ -229,6 +229,8 @@ describe('Log', () => {
     outputStreamStub = {
       write: sinon.stub(),
     };
+
+    log.init(outputStreamStub);
   });
 
   describe('error', () => {
@@ -236,7 +238,7 @@ describe('Log', () => {
       const message = 'test';
       const data = undefined;
 
-      log.error(message, data, outputStreamStub);
+      log.error(message, data);
 
       expect(outputStreamStub.write).to.have.been.calledWith('\x1B[31mtest\x1B[0m\n');
     });
@@ -246,9 +248,9 @@ describe('Log', () => {
       const message = 'test';
       const data = undefined;
 
-      log.info(message, data, outputStreamStub);
+      log.info(message, data);
 
-      expect(outputStreamStub.write).to.have.been.calledWith('test\x1B[0m\n');
+      expect(outputStreamStub.write).to.have.been.calledWith('test\n');
     });
   });
   describe('result', () => {
@@ -256,10 +258,10 @@ describe('Log', () => {
       const message = 'test';
       const data = 'test';
 
-      log.result(message, data, outputStreamStub);
+      log.result(message, data);
 
-      expect(outputStreamStub.write).to.have.been.calledWith('test\x1B[0m\n');
-      expect(outputStreamStub.write.secondCall).to.have.been.calledWith('\n\x1B[1mtest\x1B[0m\n\n');
+      expect(outputStreamStub.write).to.have.been.calledWith('test\n\n');
+      expect(outputStreamStub.write.secondCall).to.have.been.calledWith('\x1B[1mtest\x1B[0m\n\n');
     });
   });
   describe('success', () => {
@@ -267,9 +269,9 @@ describe('Log', () => {
       const message = 'test';
       const data = undefined;
 
-      log.success(message, data, outputStreamStub);
+      log.success(message, data);
 
-      expect(outputStreamStub.write).to.have.been.calledWith('\x1B[32m✔test\x1B[0m\n');
+      expect(outputStreamStub.write).to.have.been.calledWith('\x1B[32m✔ test\x1B[0m\n');
     });
   });
 });

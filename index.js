@@ -5,6 +5,8 @@ const copyToClipboard = require('./src/copy-clipboard');
 const log = require('./src/utils/log');
 const { PASSWORD_MESSAGE } = require('./src/constants');
 
+log.init();
+
 const main = () => {
   const validLength = validate(process.argv);
 
