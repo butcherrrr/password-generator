@@ -45,6 +45,14 @@ const LOG_STYLE = {
   NONE: '',
 };
 
+const LOG_TYPES = {
+  ERROR: 'error',
+  INFO: 'info',
+  RESULT_HEADER: 'result-header',
+  RESULT_DATA: 'result-data',
+  SUCCESS: 'success',
+};
+
 const PASSWORD_MESSAGE = 'New password:';
 
 module.exports = {
@@ -55,4 +63,5 @@ module.exports = {
   PLATFORM_TYPES,
   LOG_STYLE,
   PASSWORD_MESSAGE,
+  LOG_TYPES,
 };
