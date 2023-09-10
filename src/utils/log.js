@@ -18,7 +18,7 @@ const format = (text, options = {}) => {
   return `${formatted}${LOG_STYLE.LINE_BREAK}`;
 };
 
-const error = (message, data = undefined) => {
+const error = (message, data) => {
   const formattedMessage = format(message, { type: LOG_TYPES.ERROR });
   outputStream.write(formattedMessage);
   if (data) {
@@ -27,7 +27,7 @@ const error = (message, data = undefined) => {
   }
 };
 
-const info = (message, data = undefined) => {
+const info = (message, data) => {
   const formattedMessage = format(message, { type: LOG_TYPES.INFO });
   outputStream.write(formattedMessage);
   if (data) {
@@ -36,7 +36,7 @@ const info = (message, data = undefined) => {
   }
 };
 
-const result = (message, data = undefined) => {
+const result = (message, data) => {
   const formattedMessage = format(message, { type: LOG_TYPES.RESULT_HEADER });
   outputStream.write(formattedMessage);
   if (data) {
